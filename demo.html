@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Flower Explosion to Letter</title>
+<style>
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f6e9d8;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+    position: relative;
+}
+
+/* BÔNG HOA CHÍNH */
+#flower {
+    width: 150px;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.5s ease;
+    z-index: 100;
+}
+#flower:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 15px #ff69b4);
+}
+
+/* CÁNH HOA NỔ TUNG */
+.petal {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background-image: url('https://png.pngtree.com/png-vector/20240917/ourmid/pngtree-pink-rose-flower-png-image_13618784.png');
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    z-index: 150;
+}
+
+/* PHONG BÌ + LÁ THƯ */
+#envelopeContainer {
+    display: none;
+    opacity: 0;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* center */
+    transition: opacity 1.5s ease;
+}
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background: #d35400;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+.flap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #e67e22;
+    clip-path: polygon(0 0, 100% 0, 50% 60%);
+    transform-origin: top;
+    transition: 0.9s ease;
+    z-index: 12;
+}
+.letter-small {
+    position: absolute;
+    bottom: -120%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 120%;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    opacity: 0;
+    text-align: center;
+    transition: 1.4s ease;
+}
+.letter-big {
+    position: fixed;
+    bottom: -130%;
+    left: 50%;
+    transform: translateX(-50%) scale(1.15);
+    width: 90%;
+    max-width: 1000px;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    opacity: 0;
+    transition: bottom 1.6s ease-out, opacity 1.6s ease-out;
+    z-index: 20;
+
+    /* NEON BORDER NHẸ */
+    border: 4px solid #ff99cc;
+    animation: neonBorder 2s linear infinite;
+    box-shadow: 0 0 10px #ffb3d9, 0 0 20px #ffb3d9, 0 0 30px #ffb3d9, 0 0 40px #ffb3d9;
+}
+/* TIM BAY */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 25px;
+    opacity: 0;
+    animation: floatHeart 4s ease-out forwards;
+}
+
+/* HOA BAY TOÀN MÀN HÌNH */
+.floating-flower {
+    position: fixed;
+    font-size: 20px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes floatHeart {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-550px) scale(1.6); opacity: 0; }
+}
+
+.open .flap { 
+    transform: rotateX(180deg);
+}
+.open .letter-small {
+    opacity: 1;
+    bottom: 240px;
+    transform: translateX(-50%) scale(1.05);
+}
+@keyframes neonBorder {
+    0% {
+        border-color: #ff99cc;
+        box-shadow: 0 0 10px #ffb3d9, 0 0 20px #ffb3d9, 0 0 30px #ffb3d9, 0 0 40px #ffb3d9;
+    }
+    50% {
+        border-color: #ffcce6;
+        box-shadow: 0 0 15px #ffcce6, 0 0 25px #ffcce6, 0 0 35px #ffcce6, 0 0 50px #ffcce6;
+    }
+    100% {
+        border-color: #ff99cc;
+        box-shadow: 0 0 10px #ffb3d9, 0 0 20px #ffb3d9, 0 0 30px #ffb3d9, 0 0 40px #ffb3d9;
+    }
+}
+
+</style>
+</head>
+<body>
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Flower Explosion to Letter</title>
+        <link rel="icon" type="image/png" href="https://files.catbox.moe/jjjyeh.png">
+
+<audio id="bgMusic" controls style="
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    opacity: 0.5; 
+    width: 300px;
+">
+    <source src="https://files.catbox.moe/4esgv6.mp3" type="audio/mpeg">
+  Trình duyệt không hỗ trợ audio
+</audio>
+
+<script>
+let musicStarted = false;
+
+document.getElementById("flower").addEventListener("click", () => {
+    const music = document.getElementById("bgMusic");
+
+    if (!musicStarted) {
+        music.volume = 0.5;
+        music.play().catch(e => console.log("Trình duyệt chặn, cần click user:", e));
+        musicStarted = true;
+    }
+
+    // Gọi animation mở thư hoặc các hiệu ứng khác
+    showEnvelope(); // hãy chắc chắn hàm showEnvelope() đã có trong code của bạn
+});
+</script>
+
+<!-- BÔNG HOA CHÍNH -->
+<img src="https://heraflower.vn/wp-content/uploads/2024/10/mau-hoa-1-10.png" id="flower" alt="flower" onclick="explodeFlower()">
+
+<!-- PHONG BÌ + LÁ THƯ -->
+<div id="envelopeContainer">
+    <div class="envelope" id="env" onclick="openEnvelope()">
+        <div class="flap"></div>
+        <div class="letter-small" id="letterSmall">
+            <h4>🌸 Happy Teacher’s Day 🌸</h4>
+            <p>Chúc thầy cô luôn vui vẻ và ngập tràn hạnh phúc!</p>
+        </div>
+    </div>
+    <div class="letter-big" id="letterBig">
+        <h2>🌸Thư gửi Thầy/Cô🌸</h2>
+        <p>Nhân ngày 20/11, em muốn gửi đến thầy/cô lời cảm ơn không lời, bởi thầy/cô như những cơn gió mát lặng lẽ, len qua từng kẽ lá, nuôi dưỡng tâm hồn chúng em từng ngày. Mỗi bài học là một hạt mầm, và chính bàn tay kiên nhẫn của thầy/cô đã giúp chúng em vươn lên, rễ sâu, cành cao, để khi gió đời thổi tới, chúng em vẫn đứng vững và tỏa sáng.</p>
+        <b>=🌟WillowWilson78🌟=</b>
+    </div>
+</div>
+
+<script>
+function explodeFlower(){
+    const flower = document.getElementById("flower");
+    const rect = flower.getBoundingClientRect();
+    const centerX = rect.left + rect.width/2;
+    const centerY = rect.top + rect.height/2;
+
+    flower.style.opacity = 0;
+    
+function showCornerLogo() {
+    const link = document.createElement("a");
+    link.href = "https://www.facebook.com/WillowWilson78/";  // Link muốn dẫn tới
+    link.target = "_blank";             // mở tab mới
+
+    const logo = document.createElement("img");
+    logo.src = "https://files.catbox.moe/s61tgt.png"; 
+    logo.alt = "Logo";
+
+    logo.style.position = "fixed";
+    logo.style.bottom = "20px";
+    logo.style.right = "20px";
+    logo.style.width = "60px";
+    logo.style.height = "auto";
+    logo.style.zIndex = "9999";
+    logo.style.cursor = "pointer";
+    logo.style.transition = "transform 0.3s ease";
+
+    logo.addEventListener("mouseover", () => logo.style.transform = "scale(1.1)");
+    logo.addEventListener("mouseout", () => logo.style.transform = "scale(1)");
+
+    link.appendChild(logo);
+    document.body.appendChild(link);
+}
+
+window.addEventListener("load", showCornerLogo);
+
+showCornerLogo();
+
+
+    // =======================
+    // TẠO CÁNH HOA NỔ TUNG
+    // Nếu muốn dùng PNG: thay div.petal bằng <img src="petal.png">
+    // =======================
+    const petalsCount = 20;
+    for(let i=0;i<petalsCount;i++){
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = centerX + "px";
+        petal.style.top = centerY + "px";
+        document.body.appendChild(petal);
+
+        const angle = Math.random()*2*Math.PI;
+        const distance = 150 + Math.random()*100;
+        const rotation = Math.random()*360;
+
+        petal.animate([
+            { transform: `translate(0px,0px) rotate(0deg)`, opacity:1 },
+            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance + 100}px) rotate(${rotation}deg)`, opacity:0 }
+        ], {
+            duration: 2000 + Math.random()*1000,
+            easing: "ease-out",
+            fill: "forwards"
+        });
+
+        setTimeout(()=>petal.remove(),3000);
+    }
+
+    setTimeout(showEnvelope,2500);
+}
+
+function showEnvelope(){
+    const envelopeContainer = document.getElementById("envelopeContainer");
+    const envelope = document.getElementById("env");
+    envelopeContainer.style.display = "block";
+    setTimeout(()=>{ 
+        envelopeContainer.style.opacity = 1; 
+        envelope.style.opacity = 1; 
+        startFloatingFlowers(); // bắt đầu hoa bay toàn màn hình
+    },50);
+}
+
+// =====================
+// HOA BAY TOÀN MÀN HÌNH
+// =====================
+function startFloatingFlowers(){
+    setInterval(()=>{
+        const flower = document.createElement("div");
+        flower.className = "floating-flower";
+        flower.innerHTML = "🌸"; // nếu muốn PNG thì thay <img src="...">
+        flower.style.fontSize = (15 + Math.random()*20) + "px";
+
+        // xuất phát random toàn màn hình
+        flower.style.left = Math.random() * window.innerWidth + "px";
+        flower.style.top = Math.random() * window.innerHeight + "px";
+
+        // di chuyển theo hướng ngẫu nhiên
+        const angle = Math.random()*2*Math.PI;
+        const distance = 100 + Math.random()*300;
+        const distanceX = Math.cos(angle)*distance;
+        const distanceY = Math.sin(angle)*distance;
+
+        flower.animate([
+            { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+            { transform: `translate(${distanceX}px, ${distanceY}px) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], {
+            duration: 3000 + Math.random()*1900,
+            easing: "ease-out",
+            fill: "forwards"
+        });
+
+        document.body.appendChild(flower);
+        setTimeout(()=>flower.remove(),6000);
+    }, 300); // cứ 0.3s tạo 1 bông
+}
+
+let opened=false;
+function openEnvelope() {
+    if(opened) return;
+    opened = true;
+
+    const env = document.getElementById("env");
+    const small = document.getElementById("letterSmall");
+    const big = document.getElementById("letterBig");
+
+    env.classList.add("open");
+
+    // Lá thư nhỏ bay
+    setTimeout(()=>{
+        small.style.bottom = "900px";
+        small.style.opacity = 0;
+    },2300);
+
+    // Lá thư lớn fade in
+    setTimeout(()=>{
+        big.style.bottom = "18%";
+        big.style.opacity = 1;
+    },3500);
+
+    // Tim bay
+    for(let i=0;i<12;i++){
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="❤️";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDelay=(Math.random()*1.2)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),4500);
+    }
+}
+</script>
+</body>
+</html>
