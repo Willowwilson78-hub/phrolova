@@ -51,6 +51,20 @@ body {
     transform: translate(-50%, -50%);
     transition: opacity 1.5s ease;
 }
+#cornerLogo {
+    position: fixed;
+    bottom: 20px;   /* khoảng cách từ đáy */
+    right: 20px;    /* khoảng cách từ phải */
+    width: 60px;    /* chỉnh size logo */
+    height: auto;   /* giữ tỉ lệ ảnh */
+    z-index: 999;   /* luôn nằm trên các element khác */
+    cursor: pointer; /* nếu muốn click */
+    transition: transform 0.3s ease;
+}
+
+#cornerLogo:hover {
+    transform: scale(1.1); /* hover effect nhẹ */
+}
 .envelope {
     position: relative;
     width: 400px;    /* tăng kích thước bấm */
@@ -228,6 +242,62 @@ function explodeFlower(){
 
     setTimeout(showEnvelope,2500);
 }
+function showCornerLogo() {
+    const link = document.createElement("a");
+    link.href = "https://github.com/Willowwilson78-hub/phrolova";  // Link muốn dẫn tới
+    link.target = "_blank";             // mở tab mới
+
+    const logo = document.createElement("img");
+    logo.src = "https://files.catbox.moe/7gjy1s.png"; 
+    logo.alt = "Logo";
+
+    logo.style.position = "fixed";
+    logo.style.bottom = "20px";
+    logo.style.right = "20px";
+    logo.style.width = "60px";
+    logo.style.height = "auto";
+    logo.style.zIndex = "9999";
+    logo.style.cursor = "pointer";
+    logo.style.transition = "transform 0.3s ease";
+
+    logo.addEventListener("mouseover", () => logo.style.transform = "scale(1.1)");
+    logo.addEventListener("mouseout", () => logo.style.transform = "scale(1)");
+
+    link.appendChild(logo);
+    document.body.appendChild(link);
+}
+
+window.addEventListener("load", showCornerLogo);
+
+{
+function showCornerLogo() {
+    const link = document.createElement("a");
+    link.href = "https://www.facebook.com/WillowWilson78/";  // Link muốn dẫn tới
+    link.target = "_blank";             // mở tab mới
+
+    const logo = document.createElement("img");
+    logo.src = "https://pngimg.com/d/github_PNG65.png"; 
+    logo.alt = "Logo";
+
+    logo.style.position = "fixed";
+    logo.style.bottom = "20px";
+    logo.style.left = "20px";
+    logo.style.width = "60px";
+    logo.style.height = "auto";
+    logo.style.zIndex = "9999";
+    logo.style.cursor = "pointer";
+    logo.style.transition = "transform 0.3s ease";
+
+    logo.addEventListener("mouseover", () => logo.style.transform = "scale(1.1)");
+    logo.addEventListener("mouseout", () => logo.style.transform = "scale(1)");
+
+    link.appendChild(logo);
+    document.body.appendChild(link);
+}
+
+window.addEventListener("load", showCornerLogo);
+
+
 
 // ===================================
 // PHONG BÌ
