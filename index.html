@@ -242,60 +242,65 @@ function explodeFlower(){
 
     setTimeout(showEnvelope,2500);
 }
-function showCornerLogo() {
+
+// === LOGO GÓC PHẢI ===
+function showRightLogo() {
     const link = document.createElement("a");
-    link.href = "https://github.com/Willowwilson78-hub/phrolova";  // Link muốn dẫn tới
-    link.target = "_blank";             // mở tab mới
+    link.href = "https://www.facebook.com/WillowWilson78/";
+    link.target = "_blank";
 
     const logo = document.createElement("img");
-    logo.src = "https://files.catbox.moe/7gjy1s.png"; 
-    logo.alt = "Logo";
+    logo.src = "https://files.catbox.moe/y5womv.png";
+    logo.alt = "Logo GitHub";
 
     logo.style.position = "fixed";
     logo.style.bottom = "20px";
     logo.style.right = "20px";
-    logo.style.width = "60px";
-    logo.style.height = "auto";
+    logo.style.width = "200px";
+    logo.style.height = "200px"
     logo.style.zIndex = "9999";
     logo.style.cursor = "pointer";
-    logo.style.transition = "transform 0.3s ease";
+    logo.style.transition = "transform 0.3s";
 
-    logo.addEventListener("mouseover", () => logo.style.transform = "scale(1.1)");
-    logo.addEventListener("mouseout", () => logo.style.transform = "scale(1)");
+    logo.onmouseover = () => (logo.style.transform = "scale(1.1)");
+    logo.onmouseout = () => (logo.style.transform = "scale(1)");
 
     link.appendChild(logo);
     document.body.appendChild(link);
 }
 
-window.addEventListener("load", showCornerLogo);
-
-{
-function showCornerLogo() {
+// === LOGO GÓC TRÁI ===
+function showLeftLogo() {
     const link = document.createElement("a");
-    link.href = "https://www.facebook.com/WillowWilson78/";  // Link muốn dẫn tới
-    link.target = "_blank";             // mở tab mới
+    link.href = "https://www.facebook.com/WillowWilson78/";
+    link.target = "_blank";
 
     const logo = document.createElement("img");
-    logo.src = "https://pngimg.com/d/github_PNG65.png"; 
-    logo.alt = "Logo";
+    logo.src = "https://pngimg.com/d/github_PNG65.png";
+    logo.alt = "Logo FB";
 
     logo.style.position = "fixed";
     logo.style.bottom = "20px";
-    logo.style.left = "20px";
-    logo.style.width = "60px";
-    logo.style.height = "auto";
+    logo.style.left = "10px";
+    logo.style.width = "200px";
+    logo.style.height = "70px";
     logo.style.zIndex = "9999";
     logo.style.cursor = "pointer";
-    logo.style.transition = "transform 0.3s ease";
+    logo.style.transition = "transform 0.3s";
 
-    logo.addEventListener("mouseover", () => logo.style.transform = "scale(1.1)");
-    logo.addEventListener("mouseout", () => logo.style.transform = "scale(1)");
+    logo.onmouseover = () => (logo.style.transform = "scale(1.1)");
+    logo.onmouseout = () => (logo.style.transform = "scale(1)");
 
     link.appendChild(logo);
     document.body.appendChild(link);
 }
 
-window.addEventListener("load", showCornerLogo);
+// === GỌI CẢ HAI ===
+window.addEventListener("load", () => {
+    showRightLogo();
+    showLeftLogo();
+});
+
 
 
 
