@@ -326,9 +326,33 @@ function showLeftLogo() {
     link.href = "https://github.com/Willowwilson78-hub/phrolova";
     link.target = "_blank";
 
+    // ====== Label trên logo ======
+    const label = document.createElement("div");
+      label.innerHTML = "🌟Open-Sources🌟";
+    label.style.position = "fixed";
+    label.style.bottom = "100px"; // cách đáy logo khoảng 100px
+    label.style.left = "10px";
+    label.style.fontSize = "22px";
+    label.style.fontWeight = "bold";
+    label.style.color = "#333"; // màu chữ, có thể đổi
+    label.style.zIndex = "9999";
+    label.style.pointerEvents = "none";
+
+    // Glow giống bên phải
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @keyframes glowShadowFadeLeft {
+        0%   { text-shadow: 0 0 5px #99ccff; }
+        50%  { text-shadow: 0 0 12px #99ccff, 0 0 20px #3399ff; }
+        100% { text-shadow: 0 0 5px #99ccff; }
+    }`;
+    document.head.appendChild(style);
+    label.style.animation = "glowShadowFadeLeft 5.5s ease-in-out infinite";
+
+    // ====== Logo ======
     const logo = document.createElement("img");
     logo.src = "https://pngimg.com/d/github_PNG65.png";
-    logo.alt = "Logo FB";
+    logo.alt = "GitHub Logo";
 
     logo.style.position = "fixed";
     logo.style.bottom = "20px";
@@ -343,6 +367,9 @@ function showLeftLogo() {
     logo.onmouseout = () => (logo.style.transform = "scale(1)");
 
     link.appendChild(logo);
+
+    // Thêm vào body
+    document.body.appendChild(label);
     document.body.appendChild(link);
 }
 
