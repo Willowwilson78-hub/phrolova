@@ -159,7 +159,7 @@ body {
 </style>
 </head>
 <body>
-<audio id="bgMusic" controls style="
+<audio id="bgMusic" controls loop style="
     position: fixed; 
     top: 50%; 
     left: 50%; 
@@ -167,7 +167,7 @@ body {
     opacity: 0.5; 
     width: 300px;
 ">
-    <source src="https://files.catbox.moe/sy4rf5.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/x3eran.mp3" type="audio/mpeg">
   Trình duyệt không hỗ trợ audio
 </audio>
 
@@ -243,21 +243,66 @@ function explodeFlower(){
     setTimeout(showEnvelope,2500);
 }
 
+function setBackgroundImage(url) {
+    // Set background image
+    document.body.style.backgroundImage = `url(${url})`;
+    document.body.style.backgroundSize = "cover";      // phóng to vừa khung
+    document.body.style.backgroundPosition = "center"; // căn giữa
+    document.body.style.backgroundRepeat = "no-repeat";// không lặp
+    document.body.style.transition = "background 1s ease"; // chuyển mượt
+
+    // Nếu muốn tự gọi khi load luôn
+    if (document.readyState === "loading") {
+        window.addEventListener("load", () => {
+            document.body.style.backgroundImage = `url(${url})`;
+        });
+    } else {
+        document.body.style.backgroundImage = `url(${url})`;
+    }
+}
+
+setBackgroundImage("https://files.catbox.moe/a68j3j.jpg");
+
+
 // === LOGO GÓC PHẢI ===
 function showRightLogo() {
     const link = document.createElement("a");
     link.href = "https://www.facebook.com/WillowWilson78/";
     link.target = "_blank";
 
+    // ====== Thêm keyframes chỉ glow shadow ======
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @keyframes glowShadowFade {
+        0%   { text-shadow: 0 0 5px #ff99dd; }
+        50%  { text-shadow: 0 0 12px #ff99dd, 0 0 20px #FF4500; }
+        100% { text-shadow: 0 0 5px #ff99dd; }
+    }`;
+    document.head.appendChild(style);
+
+    // ====== Dòng chữ trên logo ======
+    const label = document.createElement("div");
+    label.innerHTML = "🌟My FaceBook Profile🌟";
+    label.style.position = "fixed";
+    label.style.bottom = "200px";      
+    label.style.right = "5px";
+    label.style.fontSize = "22px";
+    label.style.fontWeight = "bold";
+    label.style.color = "#FF4500";        // chữ giữ màu gốc
+    label.style.zIndex = "9999";
+    label.style.pointerEvents = "none"; 
+    label.style.animation = "glowShadowFade 5.5s ease-in-out infinite"; // glow shadow chậm
+
+    // ====== Logo ======
     const logo = document.createElement("img");
     logo.src = "https://files.catbox.moe/y5womv.png";
-    logo.alt = "Logo GitHub";
+    logo.alt = "Logo FB";
 
     logo.style.position = "fixed";
     logo.style.bottom = "20px";
     logo.style.right = "20px";
     logo.style.width = "200px";
-    logo.style.height = "200px"
+    logo.style.height = "200px";
     logo.style.zIndex = "9999";
     logo.style.cursor = "pointer";
     logo.style.transition = "transform 0.3s";
@@ -266,8 +311,14 @@ function showRightLogo() {
     logo.onmouseout = () => (logo.style.transform = "scale(1)");
 
     link.appendChild(logo);
+
+    // ====== Thêm vào body ======
+    document.body.appendChild(label);
     document.body.appendChild(link);
 }
+
+
+
 
 // === LOGO GÓC TRÁI ===
 function showLeftLogo() {
